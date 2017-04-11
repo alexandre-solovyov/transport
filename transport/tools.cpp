@@ -48,7 +48,6 @@ bool loadUTF16( const std::string& theFileName, std::wstring& theContents )
 	aFile.read( &aBuffer[0], aSize );
 
 	wchar_t* aWBuffer = (wchar_t*)(&aBuffer[0]);
-	const int BOM_SIZE = 1;
 	theContents = std::wstring( aWBuffer + BOM_SIZE, aWBuffer + aSize/sizeof(wchar_t) );
 	aFile.close();
 
@@ -86,3 +85,7 @@ double toDouble( const std::wstring& theData )
 		return 0;
 }
 
+double toRad( double theDegrees )
+{
+	return theDegrees / 180.0 * PI;
+}

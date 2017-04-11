@@ -63,3 +63,18 @@ TEST_F( CitiesTest, finding_is_ok )
 	EXPECT_NEAR( 55.752222, c.latitude, 1E-3 );
 	EXPECT_NEAR( 37.615556, c.longitude, 1E-3 );
 }
+
+TEST_F( CitiesTest, distance_is_ok )
+{
+	Cities cc;
+  ASSERT_TRUE( cc.load( DATA_DIR + "cities_test.dat" ) );
+
+	City m = cc.find( toW( "Moscow" ) );
+	City nn = cc.find( toW( "Nizhniy Novgorod" ) );
+	City p = cc.find( toW( "Paris" ) );
+
+	EXPECT_NEAR( 401.997, m.distance(nn), 1E-3 );
+	EXPECT_NEAR( 401.997, nn.distance(m), 1E-3 );
+	EXPECT_NEAR( 2486.715, m.distance(p), 1E-3 );
+	EXPECT_NEAR( 2884.629, nn.distance(p), 1E-3 );
+}

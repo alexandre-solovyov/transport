@@ -13,3 +13,7 @@
   #define override
 #endif
 
+
+const int    BOM_SIZE = 1;
+const double PI       = 3.14159265;
+const double R_TERRE  = 6371.0;

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 City::City( char* theName )
 {
@@ -15,7 +16,18 @@ bool City::isValid() const
 	return !name.empty();
 }
 
-
+double City::distance( const City& theCity ) const
+{
+	double phi_a = toRad( latitude );
+	double phi_b = toRad( theCity.latitude );
+	double lam_a = toRad( longitude );
+	double lam_b = toRad( theCity.longitude );
+	
+	double cosd = sin(phi_a)*sin(phi_b) + cos(phi_a)*cos(phi_b)*cos(lam_a - lam_b);
+	double d = acos( cosd );
+	double L = d*R_TERRE;
+	return L;
+}
 
 bool Cities::add( const MapOfValues& m )
 {

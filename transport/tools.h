@@ -12,3 +12,4 @@ TRANSPORT_API bool loadUTF16( const std::string&, std::wstring& );
 TRANSPORT_API std::vector<std::wstring> split( const std::wstring&, char );
 TRANSPORT_API int toInt( const std::wstring& );
 TRANSPORT_API double toDouble( const std::wstring& );
+TRANSPORT_API double toRad( double );

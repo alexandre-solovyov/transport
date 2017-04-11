@@ -8,6 +8,7 @@ struct TRANSPORT_API City
 public:
 	City( char* = 0 );
 	bool isValid() const;
+	double distance( const City& ) const;
 
 public:
 	std::wstring country;
