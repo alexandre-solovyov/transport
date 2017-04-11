@@ -3,12 +3,14 @@ cmake_minimum_required(VERSION 2.6)
 
 set(SOURCES
   cities.cpp
+  etable.cpp
   tools.cpp
 )
 
 set(HEADERS
   cities.h
   decl.h
+  etable.h
   tools.h
 )
 

@@ -1,46 +1,34 @@
 
 #pragma once
 
-#include <decl.h>
-#include <string>
-#include <map>
+#include <etable.h>
 
-class TRANSPORT_API City
+struct TRANSPORT_API City
 {
 public:
-	City( const std::wstring& = std::wstring() );
-	City( const char* );
-
+	City( char* = 0 );
 	bool isValid() const;
-	std::wstring name() const;
-	double latitude() const;
-	double longitude() const;
 
-	static City load( const std::wstring& );
-
-protected:
-	void setName( const std::wstring& );
-
-private:
-	std::wstring myName;
-	double myLatitude;
-	double myLongitude;
+public:
+	std::wstring country;
+	std::wstring name;
+	int          population;
+	double       latitude;
+	double       longitude;
 };
 
-class TRANSPORT_API Cities
+class TRANSPORT_API Cities : public ETable
 {
 public:
-	static Cities* get();
-
-	bool load( const std::string& );
-	bool add( const City& );
-	City find( const std::wstring& ) const;
-
+	bool   add( const City& theCity );
+	City   find( const std::wstring& ) const;
+	void   clear();
 	size_t size() const;
 
-private:
-	static Cities* CITIES;
+protected:
+	virtual bool add( const MapOfValues& );
 
+private:
 	typedef std::map<std::wstring, City> MapOfCities;
 	MapOfCities myCities;
 };
