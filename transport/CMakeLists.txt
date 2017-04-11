@@ -5,6 +5,7 @@ set(SOURCES
   cities.cpp
   etable.cpp
   tools.cpp
+  vehicle.cpp
 )
 
 set(HEADERS
@@ -12,11 +13,13 @@ set(HEADERS
   decl.h
   etable.h
   tools.h
+  vehicle.h
 )
 
 set(UNIT_TESTS_SOURCES
   test_cities.cpp
   test_config.cpp
+  test_vehicle.cpp
 )
 
 set(UNIT_TESTS_HEADERS
