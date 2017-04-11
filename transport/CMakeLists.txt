@@ -5,6 +5,8 @@ set(SOURCES
   cities.cpp
   etable.cpp
   global.cpp
+  iway.cpp
+  stdway.cpp
   tools.cpp
   vehicle.cpp
 )
@@ -14,6 +16,8 @@ set(HEADERS
   decl.h
   etable.h
   global.h
+  iway.h
+  stdway.h
   tools.h
   vehicle.h
 )

@@ -2,6 +2,7 @@
 #include <vehicle.h>
 #include <math.h>
 #include <global.h>
+#include <iway.h>
 
 double kmh2ms( double v )
 {
@@ -75,12 +76,42 @@ Info Vehicle::complete( double theDistanceKM ) const
 	return i1 + i2 + ic;
 }
 
-double Vehicle::cost( double theDistanceKM, double theCapacity ) const
+double Vehicle::mass() const
+{
+	//TODO: include weight of pass and fuel
+	return MA;
+}
+
+double Vehicle::cost( double theDistanceKM,
+										  double theTimeH,
+											double theCapacity ) const
 {
 	Info i = complete( theDistanceKM );
 	Global g;
-	double aComplPrice = i.fuel * g.getPrice( AV_FUEL );
+
+	double aComplPrice = i.fuel * g.getValue( AV_FUEL );
+	for( int i=0, n=EQ.size(); i<n; i++ )
+	{
+		double s = g.getValue( EQ[i] );
+		s = s / g.getValue( NB_WD ) / g.getValue( NB_WH );
+		s = s * theTimeH;
+		aComplPrice += s;
+	}
+
+	aComplPrice += g.getValue( AV_FARE ) * mass() / 1000.0;
+
 	double nb = NP * theCapacity;
 	double p = aComplPrice / nb;
 	return p;
+}
+
+Info Vehicle::complete( const IWay& theWay ) const
+{
+	return complete( theWay.distance() );
+}
+
+double Vehicle::cost( const IWay& theWay, double theCapacity ) const
+{
+	Info i = complete( theWay );
+	return cost( i.distance/1000, i.time/3600, theCapacity );
 }
