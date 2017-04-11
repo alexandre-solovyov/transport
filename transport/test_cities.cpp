@@ -38,7 +38,7 @@ TEST_F( CitiesTest, city_is_valid )
 	ASSERT_EQ( std::string( "abc d" ), toS( c.name() ) );
 }
 
-
+const std::wstring MSK;
 TEST_F( CitiesTest, loading_is_ok )
 {
 	Cities* c = Cities::get();
@@ -47,4 +47,9 @@ TEST_F( CitiesTest, loading_is_ok )
 
 	ASSERT_FALSE( c->load( "not_existing.dat" ) );
   ASSERT_TRUE( c->load( DATA_DIR + "cities.dat" ) );
+
+	ASSERT_EQ( 311, c->size() );
+
+	City t = c->find( MSK );
+	ASSERT_EQ( MSK, t.name() );
 }
