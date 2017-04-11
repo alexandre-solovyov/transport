@@ -22,9 +22,12 @@ public:
 	Info info( MODE theMode, double theDistance ) const;
 	Info complete( double theDistanceKM ) const;
 
+	double cost( double theDistanceKM, double theCapacity ) const;
+
 public:
 	std::vector<double> A;  //acceleration, m/s2
 	std::vector<double> FC; //fuel consumption (part of nominal), dimless
 	double              GT; //hour fuel consumption in nominal,   kg/h
 	double              CV; //cruise velocity                     km/h
+	int                 NP; //number of passengers
 };

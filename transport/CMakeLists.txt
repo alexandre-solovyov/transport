@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 2.6)
 set(SOURCES
   cities.cpp
   etable.cpp
+  global.cpp
   tools.cpp
   vehicle.cpp
 )
@@ -12,6 +13,7 @@ set(HEADERS
   cities.h
   decl.h
   etable.h
+  global.h
   tools.h
   vehicle.h
 )

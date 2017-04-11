@@ -1,6 +1,7 @@
 
 #include <vehicle.h>
 #include <math.h>
+#include <global.h>
 
 double kmh2ms( double v )
 {
@@ -72,4 +73,14 @@ Info Vehicle::complete( double theDistanceKM ) const
 
 	Info ic = info( CRUISE, dc );
 	return i1 + i2 + ic;
+}
+
+double Vehicle::cost( double theDistanceKM, double theCapacity ) const
+{
+	Info i = complete( theDistanceKM );
+	Global g;
+	double aComplPrice = i.fuel * g.getPrice( AV_FUEL );
+	double nb = NP * theCapacity;
+	double p = aComplPrice / nb;
+	return p;
 }
