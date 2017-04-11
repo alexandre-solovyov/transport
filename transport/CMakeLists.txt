@@ -5,6 +5,7 @@ set(SOURCES
   cities.cpp
   etable.cpp
   global.cpp
+  idynamic.cpp
   iway.cpp
   stdway.cpp
   tools.cpp
@@ -16,6 +17,7 @@ set(HEADERS
   decl.h
   etable.h
   global.h
+  idynamic.h
   iway.h
   stdway.h
   tools.h
@@ -42,4 +44,7 @@ link_directories( $ENV{GTEST_DIR}/lib )
 add_library( transport SHARED ${SOURCES} ${HEADERS} )
 add_executable( transport_tests ${UNIT_TESTS_SOURCES} ${UNIT_TESTS_HEADERS} )
 
+add_executable( transport_example example.cpp )
+
 target_link_libraries( transport_tests ${GTEST_LIBRARIES} transport )
+target_link_libraries( transport_example transport )

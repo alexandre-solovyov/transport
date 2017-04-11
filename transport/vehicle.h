@@ -3,6 +3,7 @@
 
 #include <global.h>
 #include <vector>
+#include <idynamic.h>
 
 class IWay;
 
@@ -16,10 +17,10 @@ struct TRANSPORT_API Info
 	double fuel;     // in kg
 };
 
-class TRANSPORT_API Vehicle
+class TRANSPORT_API VehicleInfo
 {
 public:
-	enum MODE { ACCEL=0, CRUISE, LAND, _END };
+	enum MODE { STOP=0, ACCEL, CRUISE, LAND, _END };
 
 	Info info( MODE theMode, double theDistance ) const;
 	Info complete( double theDistanceKM ) const;
@@ -39,4 +40,31 @@ public:
 	double              CV; //cruise velocity                     km/h
 	int                 NP; //number of passengers
 	std::vector<Entity> EQ; //equipage;
+};
+
+class TRANSPORT_API Vehicle : public IDynamic
+{
+public:
+	Vehicle( const VehicleInfo& );
+
+	IWay* way() const;
+	void setWay( IWay* );
+
+	double position() const;
+	double velocity() const;
+
+	void go();
+	void print();
+
+	virtual void next( double dt ) override;
+
+private:
+	VehicleInfo myInfo;
+	VehicleInfo::MODE myMode;
+	IWay* myWay;
+
+	double myDistance;
+	double myLDistance;
+	double myPosition;
+	double myVelocity;
 };

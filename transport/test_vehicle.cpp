@@ -6,7 +6,8 @@
 
 extern std::string DATA_DIR;
 
-Vehicle boeing;
+VehicleInfo boeing;
+
 class VehiclesTest : public ::testing::Test
 {
 protected:

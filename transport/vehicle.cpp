@@ -9,6 +9,11 @@ double kmh2ms( double v )
 	return v * 1000 / 3600;
 }
 
+double ms2kmh( double v )
+{
+	return v / 1000 * 3600;
+}
+
 Info::Info()
 {
 	time = 0;
@@ -27,7 +32,7 @@ Info Info::operator+( const Info& i2)
 
 
 
-Info Vehicle::info( MODE theMode, double theDistance ) const
+Info VehicleInfo::info( MODE theMode, double theDistance ) const
 {
 	double CV_ms = kmh2ms( CV );
 	double GT_s = GT/3600;
@@ -62,7 +67,7 @@ Info Vehicle::info( MODE theMode, double theDistance ) const
 	return info;
 }
 
-Info Vehicle::complete( double theDistanceKM ) const
+Info VehicleInfo::complete( double theDistanceKM ) const
 {
 	double DM = theDistanceKM * 1000;
 
@@ -76,13 +81,13 @@ Info Vehicle::complete( double theDistanceKM ) const
 	return i1 + i2 + ic;
 }
 
-double Vehicle::mass() const
+double VehicleInfo::mass() const
 {
 	//TODO: include weight of pass and fuel
 	return MA;
 }
 
-double Vehicle::cost( double theDistanceKM,
+double VehicleInfo::cost( double theDistanceKM,
 										  double theTimeH,
 											double theCapacity ) const
 {
@@ -105,13 +110,85 @@ double Vehicle::cost( double theDistanceKM,
 	return p;
 }
 
-Info Vehicle::complete( const IWay& theWay ) const
+Info VehicleInfo::complete( const IWay& theWay ) const
 {
 	return complete( theWay.distance() );
 }
 
-double Vehicle::cost( const IWay& theWay, double theCapacity ) const
+double VehicleInfo::cost( const IWay& theWay, double theCapacity ) const
 {
 	Info i = complete( theWay );
 	return cost( i.distance/1000, i.time/3600, theCapacity );
+}
+
+
+
+Vehicle::Vehicle( const VehicleInfo& theInfo )
+	: myInfo( theInfo )
+{
+	setWay( 0 );
+}
+
+IWay* Vehicle::way() const
+{
+	return myWay;
+}
+
+void Vehicle::setWay( IWay* theWay )
+{
+	myWay = theWay;
+	myDistance = myWay ? myWay->distance()*1000 : 0;
+	myLDistance = 0;
+	myPosition = 0;
+	myVelocity = 0;
+	myMode = VehicleInfo::STOP;
+}
+
+double Vehicle::position() const
+{
+	return myPosition;
+}
+
+double Vehicle::velocity() const
+{
+	return myVelocity;
+}
+
+void Vehicle::print()
+{
+	printf( "[%.0f km %.0f km/h]\n", myPosition/1000, ms2kmh( myVelocity ) );
+}
+
+void Vehicle::go()
+{
+	myMode = VehicleInfo::ACCEL;
+	Info i = myInfo.info( VehicleInfo::LAND, myDistance );
+	myLDistance = myDistance - i.distance;
+}
+
+void Vehicle::next( double dt )
+{
+	if( myMode==VehicleInfo::STOP )
+		return;
+
+	double a = myInfo.A[myMode];
+	myPosition += ( myVelocity * dt + a * dt * dt / 2 );
+	myVelocity += a * dt;
+	if( myVelocity<0 )
+		myVelocity = 0;
+
+	double cv_ms = kmh2ms( myInfo.CV );
+	if( myMode==VehicleInfo::ACCEL && myVelocity>=cv_ms )
+	{
+		myVelocity = cv_ms;
+		myMode = VehicleInfo::CRUISE;
+	}
+	if( myMode==VehicleInfo::CRUISE && myPosition>=myLDistance )
+	{
+		myMode = VehicleInfo::LAND;
+	}
+	if( myMode==VehicleInfo::LAND && myVelocity<=0 )
+	{
+		myMode = VehicleInfo::STOP;
+	}
 }
